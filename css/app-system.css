@@ -1,0 +1,16 @@
+.app-container {
+    border: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.icon-image img {
+    height: 70px;
+    width: 70px;
+}
+
+.app-object {
+    display: inline-block;
+    color: white;
+    text-shadow: 1px 1px #000000;
+}

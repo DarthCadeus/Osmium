@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>WebOS Desktop</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+        <link rel="icon" href="assets/logos/favicon.png">
+    </head>
+    <body>
+        <div class="templates" hidden>
+            <script id="file-entity-template-short" type="text/x-handlebars-template">
+                <div class="file-entity" entitytype="{{entity.type}}">
+                    <img class="file-entity-icon" src="{{entity.bound.icon}}">
+                    <div class="file-entity-label">
+                        {{entity.name}}
+                    </div>
+                </div>
+            </script>
+            <script id="background-entity-template" type="text/x-handlebars-template">
+                <div class="background-entity" style="background-image:url({{image.image}})" onclick="setDesktop({{image.label}})">
+                    {{image.label}}
+                </div>
+            </script>
+            <script id="file-entity-template-metadata" type="text/x-handlebars-template">
+                <div class="file-entity-metadata" entitytype="{{entity.type}}">
+                    <img class="file-entity-icon" src="{{entity.bound.icon}}">
+                    <div class="file-entity-label">
+                        {{entity.name}}
+                    </div>
+                    <div class="meta-data">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>size</td>
+                                    <td>{{entity.bound.size}}</td>
+                                </tr>
+                                <tr>
+                                    <td>path</td>
+                                    <td>{{path}}</td>
+                                </tr>
+                                <tr>
+                                    <td>created at</td>
+                                    <td>{{entity.bound.createdAt}}</td>
+                                </tr>
+                                <tr>
+                                    <td>last modified</td>
+                                    <td>{{entity.bound.modifiedAt}}</td>
+                                </tr>
+                                <tr>
+                                    <td>permissions</td>
+                                    <td>{{permission}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </script>
+            <script id="app-object-template-short" type="text/x-handlebars-template">
+                <div class="app-object" appname="{{app.name}}">
+                    <div class="icon-image">
+                        <img src="{{app.metadata.icon}}">
+                    </div>
+                    <div class="name">
+                        {{app.name}}
+                    </div>
+                </div>
+            </script>
+        </div>
+        <div class="menu-bar">
+            <div class="system-icon">
+            	<img src="assets/logos/favicon.png">
+            </div>
+            <div class="app-space"></div>
+        </div>
+        <div class="desktop">
+            <div class="extended-system-space hidden">
+                <div class="background-image-space">
+
+                </div>
+            </div>
+        </div>
+        <div class="footer-bar">
+        	<div class="pinned-apps"></div>
+        	<div class="recent-apps"></div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js" charset="utf-8"></script>
+        <script src="js/external/leancloud.min.js" charset="utf-8"></script>
+        <script src="js/main.js" charset="utf-8"></script>
+    </body>
+</html>
