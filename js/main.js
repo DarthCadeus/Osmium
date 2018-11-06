@@ -57,15 +57,23 @@ function checkClass(c) {
 
 function check(o, t) {
     if(!t) {
-        if(o.charAt().toUpperCase() == o.charAt()) 
+        if(o.charAt().toUpperCase() == o.charAt()) {
+            t = "class"
+        } else {
+            t = "function"
+        }
+    }
+    if(t == "class") {
+        return checkClass(o)
+    } else {
+        return checkFunction(o)
     }
 }
 
-
-function demand(f) {
+function demand(f, t) {
     let result;
     const id = setInterval(function() {
-        result = check(f);
+        result = check(f, t);
         if(result) {
             clearInterval(id);
             return;
