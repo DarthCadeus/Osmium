@@ -102,6 +102,7 @@ function loadMainOS() {
     include("js/systemEnvironment/menuBarDropdown.js", "js");
 
     // load file system
+    include("js/fileSystem/fileObject.js", "js");
     include("js/fileSystem/fileSystem.js", "js");
     include("js/fileSystem/fileSystemRenderer.js", "js");
 

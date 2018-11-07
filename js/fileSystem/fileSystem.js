@@ -3,9 +3,8 @@ const ROOT = ".";
 const TRASH = "t."
 
 class FileEntity {
-	constructor(name, type, parent, bound) {
+	constructor(name, parent, bound) {
 		this.name = name;
-		this.type = type;
 		this.parent = parent;
 		parent.children.push(this);
 		this.index = parent.children.length - 1;
