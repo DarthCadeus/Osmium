@@ -59,11 +59,18 @@ function lcInit() {
 lcInit();
 
 function logIn() {
+	if(ls.get("username") || ls.get("password")) {
+		AV.User.logIn(ls.get("username"), ls.get("password")).then(function () {
+			loadMainOS();
+		}, function (err) {
+			console.log(err);
+		});
+	}
 	let frame = $([
 		"<div class='authServiceLogin'>",
 		"	<h3> Please Login! </h3>",
 		"	<p> Although you have chosen a database, you have not yet logged in. There might be multiple users, after all! </p>",
-		"	<p> <input type='text' class='userName' placeholder='username' required> <br/><input type='text' class='email' placeholder='email' required> <br/><input type='password' class='passWord' placeholder='password' required> <br/><button class='logIn'>log in</button> <button class='register'>Register</button> </p>",
+		"	<p> <input type='text' class='userName' placeholder='username' required> <br/><input type='text' class='email' placeholder='email' required> <br/><input type='password' class='passWord' placeholder='password' required> <br/><input type='checkbox' class='rememberMe'>remember me<br/><input type='checkbox' class='rememberMeTen'>remember me for ten days<br/><button class='logIn'>log in</button> <button class='register'>Register</button> </p>",
 		"</div>"
 	].join("\n"));
 	$("body").append(frame);
@@ -73,6 +80,13 @@ function logIn() {
 		user.setPassword($(".authServiceLogin p .passWord").val());
 		user.setEmail($(".authServiceLogin p .email").val());
 		user.signUp().then(function(){
+			if($(".authServiceLogin p .rememberMe").val()) {
+				ls.set("username", $(".authServiceLogin p .userName").val());
+				ls.set("password", $(".authServiceLogin p .passWord").val());
+			} else if($(".authServiceLogin .rememberMeTen").val()) {
+				ls.set("username", $(".authServiceLogin p .userName").val(), 10);
+				ls.set("password", $(".authServiceLogin p .passWord").val(), 10);
+			}
 			frame.remove();
 			loadMainOS();
 		}, function(err){
@@ -81,6 +95,13 @@ function logIn() {
 	});
 	$(".authServiceLogin p .logIn").click(function(){
 		AV.User.logIn($(".authServiceLogin p .userName").val(), $(".authServiceLogin p .passWord").val()).then(function(){
+			if($(".authServiceLogin p .rememberMe").val()) {
+				ls.set("username", $(".authServiceLogin p .userName").val());
+				ls.set("password", $(".authServiceLogin p .passWord").val());
+			} else if($(".authServiceLogin .rememberMeTen").val()) {
+				ls.set("username", $(".authServiceLogin p .userName").val(), 10);
+				ls.set("password", $(".authServiceLogin p .passWord").val(), 10);
+			}
 			frame.remove();
 			loadMainOS();
 		}, function(err){
