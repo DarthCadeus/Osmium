@@ -16,6 +16,7 @@ class FileObject {
 		this.user = config.user;
 		this.permissions = config.permit;
 		this.type = config.type;
+		this.objectId = config.objectId;
 		if(this.type in available_icons) {
 			this.icon = "assets/logos/File icons/"+this.type+".png";
 		} else if (icon_redirect[this.type]) {
@@ -23,6 +24,7 @@ class FileObject {
 		} else {
 			this.icon = "assets/logos/File icons/generic.png";
 		}
+		this.config = config;
 	}
 }
 
