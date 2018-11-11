@@ -31,25 +31,14 @@ $(function(){
                 file.save().then(function(fobj){
                     console.log(fobj);
                     console.log("Success!");
-                    // fileobject = new FileEntity(name, new FileObject({
-                    //     url: fobj.url(),
-                    //     user: AV.User.current(),
-                    //     // permit: {user: AV.User.current()},
-                    //     // type: name.split(".")[name.split(".").length-1],
-                    //     objectId: fobj.get("objectId"),
-                    //     size: fobj.attributes.metaData.size
-                    // }));
-                    // fileobject = new FileEntity(name, {name: "hi"});
-                    // fileobject = {
-                    //     name: "hi"
-                    // }
                     fileobject = {
                         name: name,
                         type: name.split(".")[name.split(".").length-1],
                         url: fobj.url(),
                         user: AV.User.current(),
                         objectId: fobj.get("objectId"),
-                        size: fobj.attributes.metaData.size
+                        size: fobj.attributes.metaData.size,
+                        parent: "fs.originNode"
                     };  // everything stored on the cloud is primitive
                     console.log(fobj.url());
                     f.set("FileObject", fileobject);
@@ -63,4 +52,30 @@ $(function(){
     });
 
     appInterface.register(app);
+});
+
+$(function() {
+    // fetch files from server
+    const query = new AV.Query("FileManager");
+    query.find().then(function(allFiles){
+        allFiles.forEach(function(file) {
+            const sourceObject = file.get("FileObject");
+            let fileObject = new BoundFileObject({
+                url: sourceObject.url,
+                size: sourceObject.size,
+                createdAt: file.get("createdAt"),
+                modifiedAt: file.get("updatedAt"),
+                user: sourceObject.user,
+                permit: {
+                    user: sourceObject.user
+                },
+                type: sourceObject.type,
+                objectId: sourceObject.objectId,  // object id of the file object
+                selfObjectId: file.get("objectId")
+            });
+            let fileEntity = new FileEntity(sourceObject.name, eval(sourceObject.parent) || fs.originNode, fileObject);
+        });
+    }, (err) => {
+        console.error(err);
+    });
 });

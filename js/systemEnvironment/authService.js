@@ -61,6 +61,7 @@ lcInit();
 function logIn() {
 	if(ls.get("username") || ls.get("password")) {
 		AV.User.logIn(ls.get("username"), ls.get("password")).then(function () {
+			frame.remove();
 			loadMainOS();
 		}, function (err) {
 			console.log(err);

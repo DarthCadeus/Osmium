@@ -7,7 +7,7 @@ const icon_redirect = {
 	"xhtml": "html"
 };
 
-class FileObject {
+class BoundFileObject {
 	constructor (config) {
 		this.url = config.url;
 		this.size = config.size;
@@ -17,7 +17,8 @@ class FileObject {
 		this.permissions = config.permit;
 		this.type = config.type;
 		this.objectId = config.objectId;
-		if(this.type in available_icons) {
+		this.selfObjectId = config.selfObjectId;
+		if(available_icons.indexOf(this.type) != -1) {
 			this.icon = "assets/logos/File icons/"+this.type+".png";
 		} else if (icon_redirect[this.type]) {
 			this.icon = "assets/logos/File icons/"+icon_redirect[this.type]+".png";
@@ -28,7 +29,7 @@ class FileObject {
 	}
 }
 
-FileObject.prototype.permit = function (user) {
+BoundFileObject.prototype.permit = function (user) {
 	if(this.permissions.user == user) return true;
 	return false;
 };

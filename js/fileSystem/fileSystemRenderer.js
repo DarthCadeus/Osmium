@@ -1,4 +1,5 @@
 function render(node, target) {
+	$(target).empty();
 	node.forEachChild(function(x) {
 		$(target).append(x.renderSmall());
 	})
