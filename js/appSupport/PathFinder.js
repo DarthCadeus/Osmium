@@ -3,14 +3,19 @@ $(function(){
         icon: "assets/logos/apps/pathfinder.png"
     }, $([
         "<div class='pathfinder'>",
+        "   <div class='top-toolbar'>",
+        "       <button class='upload-button'>",
+        "           upload files",
+        "       </button>",
+        "       <button class='new-folder'>",
+        "           new folder",
+        "       </button>",
+        "   </div>",
+        "   <hr>",
         "   <div class='files-area'>",
         "   </div>",
         "   <div class='display-area'",
         "   </div>",
-        "   <hr>",
-        "   <button class='upload-button'>",
-        "   upload files",
-        "   </button>",
         "</div>"
     ].join("\n")), function(a) {
         render(fs, ".files-area");
@@ -30,7 +35,6 @@ $(function(){
                 const f = new FileManager();
                 file.save().then(function(fobj){
                     console.log(fobj);
-                    console.log("Success!");
                     fileobject = {
                         name: name,
                         type: name.split(".")[name.split(".").length-1],
@@ -47,6 +51,36 @@ $(function(){
                 }, function(err) {
                     console.error(err);
                 });
+            });
+        });
+        $(".pathfinder .new-folder").click(function(){
+            const FileManager = AV.Object.extend("FileManager");
+            const f = new FileManager();
+            const name = prompt("Foler name?", "untitled folder");  // TODO: revise this out
+            let fileobject;
+            fileobject = {
+                name: name,
+                type: "directory",
+                user: AV.User.current(),
+                parent: "fs.originNode"
+            };
+            f.set("FileObject", fileobject);
+            f.save().then(function(cloudf) {
+                const sourceObject = cloudf.get("FileObject");
+                const bound = new BoundFileObject({
+                    createdAt: cloudf.get("createdAt"),
+                    modifiedAt: cloudf.get("modifiedAt"),
+                    user: sourceObject.user,
+                    permit: {
+                        user: sourceObject.user
+                    },
+                    type: "directory",
+                    selfObjectId: cloudf.get("objectId")
+                });
+                let folder = new FileEntity(name, fs.originNode, bound);
+                render(fs, ".files-area");
+            }, function(err) {
+                console.log(err);
             });
         });
     });

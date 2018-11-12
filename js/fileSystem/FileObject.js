@@ -4,7 +4,8 @@ const icon_redirect = {
 	"pptx": "ppt",
 	"xlsx": "xls",
 	"md": "rtf",
-	"xhtml": "html"
+	"xhtml": "html",
+	"directory": "zip"  // TODO: revise this temporary solution out
 };
 
 class BoundFileObject {
