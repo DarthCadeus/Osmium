@@ -90,3 +90,10 @@ LocalStorageManager.prototype.deleteCookie = function (key) {
     if(value == "") return false;
     this.setCookie(key, value, -1);
 };
+
+function join (l1, l2) {
+    for(let i = 0; i < l1.length; i++) {
+        l2.push(l1[i]);
+    }
+    return l2;
+}

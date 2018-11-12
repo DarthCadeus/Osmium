@@ -13,7 +13,7 @@ $(function(){
         "   </button>",
         "</div>"
     ].join("\n")), function(a) {
-        render(fs, ".pathfinder");
+        render(fs, ".files-area");
         $(".pathfinder .upload-button").click(function(){
             popDialog([
                 "<div class='uploadDialog'>",
@@ -60,20 +60,41 @@ $(function() {
     query.find().then(function(allFiles){
         allFiles.forEach(function(file) {
             const sourceObject = file.get("FileObject");
-            let fileObject = new BoundFileObject({
-                url: sourceObject.url,
-                size: sourceObject.size,
-                createdAt: file.get("createdAt"),
-                modifiedAt: file.get("updatedAt"),
-                user: sourceObject.user,
-                permit: {
-                    user: sourceObject.user
-                },
-                type: sourceObject.type,
-                objectId: sourceObject.objectId,  // object id of the file object
-                selfObjectId: file.get("objectId")
-            });
-            let fileEntity = new FileEntity(sourceObject.name, eval(sourceObject.parent) || fs.originNode, fileObject);
+            if(sourceObject.user.id == AV.User.current().id) {
+                let fileObject = new BoundFileObject({
+                    url: sourceObject.url,
+                    size: sourceObject.size,
+                    createdAt: file.get("createdAt"),
+                    modifiedAt: file.get("updatedAt"),
+                    user: sourceObject.user,
+                    permit: {
+                        user: sourceObject.user
+                    },
+                    type: sourceObject.type,
+                    objectId: sourceObject.objectId,  // object id of the file object
+                    selfObjectId: file.get("objectId")
+                });
+                let parent;
+                if (sourceObject.parent == "fs.originNode" || !sourceObject.parent) {
+                    parent = fs.originNode;
+                } else {
+                    if (sourceObject.parent.selfObjectId) {
+                        parent = fs.search({
+                            selfObjectId: sourceObject.parent.selfObjectId
+                        });
+                        if(parent == []) {
+                            console.error(`No parent found for node ${sourceObject.selfObjectId}(${sourceObject.name})`)
+                        }
+                        if(parent.length > 1) {
+                            console.warn(`Found multiple parents for ${sourceObject.selfObjectId}(${sourceObject.name})`);
+                        }
+                        parent = parent[0];
+                    } else {
+                        console.error(`No object id found for parent of node ${sourceObject.selfObjectId}(${sourceObject.name})`);
+                    }
+                }
+                let fileEntity = new FileEntity(sourceObject.name, parent, fileObject);
+            }
         });
     }, (err) => {
         console.error(err);

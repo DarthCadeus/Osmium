@@ -30,6 +30,6 @@ class BoundFileObject {
 }
 
 BoundFileObject.prototype.permit = function (user) {
-	if(this.permissions.user == user) return true;
+	if(this.permissions.user.id == user.id) return true;
 	return false;
 };
