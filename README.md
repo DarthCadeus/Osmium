@@ -23,6 +23,8 @@ source: easyicon.net
 #### Apps
 author: Owen li (Darth Cadeus)
 created with: canva.com
+#### Folders
+http://www.thesquid.ink/flat-icons/, easyicon.net
 
 <!-- #### File Icons
 Currently supported file icons:

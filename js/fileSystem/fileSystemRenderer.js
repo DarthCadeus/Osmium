@@ -1,7 +1,17 @@
 function render(node, target) {
 	$(target).empty();
 	node.forEachChild(function(x) {
-		$(target).append(x.renderSmall());
+		let element = $(x.renderSmall());
+		if(x.bound.type != "directory") {
+			$(element).draggable();
+		} else {
+			$(element).droppable({
+				drop: function(event, ui) {
+					alert("dropped!");
+				}
+			});
+		}
+		$(target).append(element);
 	})
 }
 
@@ -12,7 +22,8 @@ $(function(){
 		const context = {
 			entity: this
 		};
-		return template(context);
+		let element = template(context);
+		return element;
 	}
 
 	FileEntity.prototype.renderMeta = function () {

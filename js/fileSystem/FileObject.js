@@ -1,11 +1,10 @@
-const available_icons = ["ai", "avi", "css", "dbf", "doc", "dwg", "exe", "fla", "html", "iso", "js", "json", "mp3", "mp4", "pdf", "png", "ppt", "rtf", "svg", "txt", "xls", "xml", "zip"];
+const available_icons = ["ai", "avi", "css", "dbf", "doc", "dwg", "exe", "fla", "html", "iso", "js", "json", "mp3", "mp4", "pdf", "png", "ppt", "rtf", "svg", "txt", "xls", "xml", "zip", "directory"];
 const icon_redirect = {
 	"docx": "doc",
 	"pptx": "ppt",
 	"xlsx": "xls",
 	"md": "rtf",
 	"xhtml": "html",
-	"directory": "zip"  // TODO: revise this temporary solution out
 };
 
 class BoundFileObject {
