@@ -21,6 +21,9 @@ function render(node, target) {
 					}
 				}
 			});
+			$(element).click(function(){
+				render(x, target);
+			})
 		}
 		$(target).append(element);
 	})
