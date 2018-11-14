@@ -18,13 +18,15 @@ FileEntity.prototype.isdir = function() {
 };
 
 FileEntity.prototype.forEachChild = function(f) {
+	let collected_returns = [];
 	for(let i = 0; i < this.children.length; i ++) {
-		f(this.children[i]);
+		collected_returns.push(f(this.children[i]));
 	}
+	return collected_returns;
 };
 
 FileEntity.prototype.unBind = function() {
-	parent.children.pop(this.index);
+	this.parent.children.splice(this.index, 1);
 	this.index = undefined;
 	this.parent = undefined;
 	return this;
@@ -47,8 +49,8 @@ FileEntity.prototype.match = function(criteria) {
 		return false;
 	}
 	let objectid_matched = true;  // defaults to true because of return mechanism
-	let name_matched = false;
-	let type_matched = false;
+	let name_matched = true;
+	let type_matched = true;
 	if (criteria.selfObjectId) {
 		if(this.bound.selfObjectId != criteria.selfObjectId) {
 			objectid_matched = false;
@@ -123,7 +125,7 @@ FileSystem.prototype.forEachChild = function(f) {
 }
 
 FileSystem.prototype.search = function(criteria) {
-	this.originNode.search(criteria);
+	return this.originNode.search(criteria);
 }
 
 let fs = new FileSystem();

@@ -9,7 +9,7 @@
     <body>
         <div class="templates" hidden>
             <script id="file-entity-template-short" type="text/x-handlebars-template">
-                <div class="file-entity" entitytype="{{entity.type}}">
+                <div class="file-entity" entitytype="{{entity.bound.type}}" objectid="{{entity.bound.selfObjectId}}">
                     <img class="file-entity-icon" src="{{entity.bound.icon}}">
                     <div class="file-entity-label">
                         {{entity.name}}

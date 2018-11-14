@@ -3,11 +3,22 @@ function render(node, target) {
 	node.forEachChild(function(x) {
 		let element = $(x.renderSmall());
 		if(x.bound.type != "directory") {
-			$(element).draggable();
+			$(element).draggable({
+				containment: "parent"
+			});
 		} else {
 			$(element).droppable({
 				drop: function(event, ui) {
-					alert("dropped!");
+					let targ = fs.search({selfObjectId: ui.draggable.attr("objectid")});
+					if(targ.length == 0) {
+						console.error("no entity with the object id found");
+					} else {
+						if(targ.length > 1)
+						console.warn("multiple entities with a single id found");
+						targ[0].unBind();
+						targ[0].bind(x);
+						render(node, target);
+					}
 				}
 			});
 		}
