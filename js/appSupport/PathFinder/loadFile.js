@@ -1,4 +1,4 @@
-function loadFile(sourceObject, file, query, parentless) {
+function loadFile(sourceObject, file, query) {
 
     // create the bound file object
     let fileObject = new BoundFileObject({
@@ -23,7 +23,6 @@ function loadFile(sourceObject, file, query, parentless) {
 
         // create new file entity
         let fileEntity = new FileEntity(sourceObject.name, parent, fileObject);
-        return parentless;
     } else {
 
         // if selfObjectId is specified
@@ -39,7 +38,6 @@ function loadFile(sourceObject, file, query, parentless) {
 
                 // parent is not found
                 console.error(`No parent found for node ${fileObject.selfObjectId}(${sourceObject.name})`);
-                parentless.push([sourceObject, file, query]);
 
             } else {
 
@@ -54,14 +52,9 @@ function loadFile(sourceObject, file, query, parentless) {
                 // set the parent to the first, and hopefully only, parent object found
                 parent = parent[0];
 
-                let indicator = parentless.indexOf([sourceObject, file, query]);
-                if(indicator > -1) {
-                    parentless.splice(indicator, 1);
-                }
 
                 // create new file entity
                 let fileEntity = new FileEntity(sourceObject.name, parent, fileObject);
-                return parentless;
 
 
             }
@@ -73,5 +66,4 @@ function loadFile(sourceObject, file, query, parentless) {
 
         }
     }
-    return parentless
 }

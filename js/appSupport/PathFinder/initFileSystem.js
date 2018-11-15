@@ -28,7 +28,7 @@ function initFileSystem() {
             // check if the user ids agree
             // cannot have cross-user access of files
             if(sourceObject.user.id == AV.User.current().id) {
-                parentless = loadFile(sourceObject, file, query, parentless);
+                loadFile(sourceObject, file, query);
             }
         }
 
