@@ -2,11 +2,10 @@ function render(node, target) {
 	$(target).empty();
 	node.forEachChild(function(x) {
 		let element = $(x.renderSmall());
-		if(x.bound.type != "directory") {
-			$(element).draggable({
-				containment: "parent"
-			});
-		} else {
+		$(element).draggable({
+			containment: "parent"
+		});
+		if(x.bound.type == "directory") {
 			$(element).droppable({
 				drop: function(event, ui) {
 					let targ = fs.search({selfObjectId: ui.draggable.attr("objectid")});
@@ -18,6 +17,19 @@ function render(node, target) {
 						targ[0].unBind();
 						targ[0].bind(x);
 						render(node, target);
+
+						let sourceObject = targ[0].bound.source;
+						sourceObject.parent = {
+							selfObjectId: x.bound.selfObjectId
+						};
+
+						console.log(sourceObject);
+						let f = AV.Object.createWithoutData('FileManager', targ[0].bound.selfObjectId);
+						f.set("FileObject", sourceObject);
+						f.save().catch(function(err){
+							console.error(err);
+						});
+
 					}
 				}
 			});

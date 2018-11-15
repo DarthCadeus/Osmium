@@ -111,7 +111,13 @@ function loadMainOS() {
     include("js/appSystem/appManager.js", "js");
 
     // load default apps
-    include("js/appSupport/PathFinder.js", "js");
+
+    // pathFinder
+    include("js/appSupport/PathFinder/initFileSystem.js", "js");
+    include("js/appSupport/PathFinder/loadFile.js", "js");
+    include("js/appSupport/PathFinder/handleNewFolder.js", "js");
+    include("js/appSupport/PathFinder/handleFileUpload.js", "js");
+    include("js/appSupport/PathFinder/PathFinderRegister.js", "js");
 
     // load js styling
     include("js/systemEnvironment/backgroundPictureService.js", "js")

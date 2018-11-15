@@ -26,6 +26,7 @@ class BoundFileObject {
 			this.icon = "assets/logos/File icons/generic.png";
 		}
 		this.config = config;
+		this.source = config.source;
 	}
 }
 
