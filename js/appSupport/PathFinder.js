@@ -62,7 +62,8 @@ $(function(){
                 name: name,
                 type: "directory",
                 user: AV.User.current(),
-                parent: "fs.originNode"
+                parent: "fs.originNode",
+                children: []
             };
             f.set("FileObject", fileobject);
             f.save().then(function(cloudf) {
@@ -78,6 +79,7 @@ $(function(){
                     selfObjectId: cloudf.get("objectId")
                 });
                 let folder = new FileEntity(name, fs.originNode, bound);
+                folder.children = sourceObject.children;
                 render(fs, ".files-area");
             }, function(err) {
                 console.log(err);
@@ -116,15 +118,16 @@ $(function() {
                         parent = fs.search({
                             selfObjectId: sourceObject.parent.selfObjectId
                         });
-                        if(parent == []) {
-                            console.error(`No parent found for node ${sourceObject.selfObjectId}(${sourceObject.name})`)
+                        if(parent.length == 0) {
+                            console.error(`No parent found for node ${fileObject.selfObjectId}(${sourceObject.name})`);
+                        } else {
+                            if(parent.length > 1) {
+                                console.warn(`Found multiple parents for ${fileObject.selfObjectId}(${sourceObject.name})`);
+                            }
+                            parent = parent[0];
                         }
-                        if(parent.length > 1) {
-                            console.warn(`Found multiple parents for ${sourceObject.selfObjectId}(${sourceObject.name})`);
-                        }
-                        parent = parent[0];
                     } else {
-                        console.error(`No object id found for parent of node ${sourceObject.selfObjectId}(${sourceObject.name})`);
+                        console.error(`No object id found for parent of node ${fileObject.selfObjectId}(${sourceObject.name})`);
                     }
                 }
                 let fileEntity = new FileEntity(sourceObject.name, parent, fileObject);
