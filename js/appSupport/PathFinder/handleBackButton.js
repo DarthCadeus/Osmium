@@ -11,6 +11,9 @@ function handleBackButton() {
 }
 
 function onRenderHandleBackButton(button) {
+    if(!button) {
+        button = $(".go-back");
+    }
     if(CUR_DIR.parent) {
         $(button).removeClass("hidden");
         return true;
@@ -19,3 +22,5 @@ function onRenderHandleBackButton(button) {
         return false;
     }
 }
+
+renderRegister.register(onRenderHandleBackButton);

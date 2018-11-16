@@ -1,7 +1,7 @@
 let renderRegister = {
 	registered: [],
 	register: function (f) {
-		registered.push(f);
+		this.registered.push(f);
 	}
 }
 
