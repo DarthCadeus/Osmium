@@ -1,3 +1,5 @@
+let CUR_DIR = fs.originNode;
+
 $(function(){
     // create application
     let app = new DefaultApp("Path Finder", {
@@ -10,6 +12,9 @@ $(function(){
         "       </button>",
         "       <button class='new-folder'>",
         "           new folder",
+        "       </button>",
+        "       <button class='go-back'>",
+        "           back",
         "       </button>",
         "   </div>",
         "   <hr>",
