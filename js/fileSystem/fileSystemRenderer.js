@@ -1,3 +1,10 @@
+let renderRegister = {
+	registered: [],
+	register: function (f) {
+		registered.push(f);
+	}
+}
+
 function render(node, target) {
 	$(target).empty();
 	node.forEachChild(function(x) {
@@ -34,10 +41,16 @@ function render(node, target) {
 				}
 			});
 			$(element).click(function(){
+				CUR_DIR = x;
 				render(x, target);
 			})
 		}
 		$(target).append(element);
+		let collectedReturns = [];
+		for(let func of renderRegister.registered) {
+			collectedReturns.push(func());
+		}
+		return collectedReturns;
 	})
 }
 
