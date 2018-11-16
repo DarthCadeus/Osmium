@@ -25,10 +25,12 @@ function lcInit() {
 		"		<p>We do not supply a database because we respect your privacy. If you want to create your own, we are all for it! </p>",
 		"		<p>However, if you simply wish to try this out, it is okay to use our trial database. Simply click <button class='useDefault'>this button</button>!</p>",
 		"		<p>If you so wish, be warned that there is a limit to requests set by the provider. </p>",
-		"		<p>Id: <input class='appId' place='app id'><br/>Key: <input type='password' class='appKey' place='app key'><br/><input type='checkbox' class='rememberMe'>remember me<br/><input type='checkbox' class='rememberMeTen'>remember me for ten days<br/><button class='useCustom'>confirm</button></p>",
+		"		<p>Id: <input class='appId' place='app id'><br/>Key: <input type='password' class='appKey' place='app key'><br/><input type='checkbox' class='rememberMe'>remember me<br/><input type='checkbox' class='rememberMeTen'>remember me for ten days<br/><button class='useCustom'>confirm</button></p>", // it doesn't really use cookies (local storage), but hey!
 		"	</div>",
 		"</div>"
 	].join("\n"));
+
+
 	$("body").append(frame);
 	$(".authServicePopUp p .useDefault").click(function(){
 		if($(".authServicePopUp p .rememberMe").val()) {
@@ -64,7 +66,7 @@ function logIn() {
 			frame.remove();
 			loadMainOS();
 		}, function (err) {
-			console.log(err);
+			console.error(err);
 		});
 	}
 	let frame = $([
@@ -75,6 +77,7 @@ function logIn() {
 		"</div>"
 	].join("\n"));
 	$("body").append(frame);
+	projectCookies();
 	$(".authServiceLogin p .register").click(function(){
 		let user = new AV.User();
 		user.setUsername($(".authServiceLogin p .userName").val());
