@@ -117,6 +117,7 @@ function loadMainOS() {
     include("js/appSupport/PathFinder/loadFile.js", "js");
     include("js/appSupport/PathFinder/handleNewFolder.js", "js");
     include("js/appSupport/PathFinder/handleFileUpload.js", "js");
+    include("js/appSupport/PathFinder/handleBackButton.js", "js");
     include("js/appSupport/PathFinder/PathFinderRegister.js", "js");
 
     // load js styling

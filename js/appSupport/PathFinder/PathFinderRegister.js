@@ -28,6 +28,7 @@ $(function(){
     ].join("\n")), function(a) {
         handleFileUpload(a);  // source: handle file upload.js
         $(".new-folder").click(handleNewFolder);  // source: handle new folder.js
+        $(".go-back").click(handleBackButton);
     });
 
     // register the application
