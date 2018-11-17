@@ -64,7 +64,7 @@ function logIn() {
 	if(ls.get("username") || ls.get("password")) {
 		AV.User.logIn(ls.get("username"), ls.get("password")).then(function () {
 			frame.remove();
-			$(".authmode").removeClass(".authmode");
+			$(".authmode").removeClass("authmode");
 			loadMainOS();
 		}, function (err) {
 			console.error(err);
@@ -108,7 +108,7 @@ function logIn() {
 				ls.set("password", $(".description div .passWord").val(), 10);
 			}
 			frame.remove();
-			$(".authmode").removeClass(".authmode");
+			$(".authmode").removeClass("authmode");
 			loadMainOS();
 		}, function(err){
 			console.log(err);
