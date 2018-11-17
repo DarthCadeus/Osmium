@@ -1,0 +1,74 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.authmode {
+    text-align: center;
+}
+
+.description {
+    padding: 2vw;
+}
+
+.description h3 {
+    text-align: center;
+    font-size: 100px;
+}
+
+.description p {
+    font-family: "Toppan Bunkyu Gothic", serif;
+    font-size: 20px;
+    text-align: center;
+    padding-left: 15vw;
+    padding-right: 15vw;
+}
+
+.cookie-note {
+    position: fixed;
+    bottom: 0;
+    background-color: #0d386e;
+    color: white;
+    width: 98vw;
+    margin: 0;
+    padding: 1vw;
+    padding-top: 4vh;
+    border-top: solid 1vh #0091ac;
+    padding-bottom: 3vh;
+    font-size: 20px;
+}
+
+.cookie-note button {
+    background: none;
+    border: none;
+    color: white;
+}
+
+.description button {
+    font-size: 30px;
+    background: #27a768;
+    border-radius: 10px;
+    color: white;
+}
+
+.description div {
+    font-size: 30px;
+    display: inline-block;
+    width: 25vw;
+    margin-left: 35vw;
+    margin-top: 10vh;
+    border: solid 1.5vw #757e8a;
+    padding: 1vw;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}
+
+.description div input {
+    font-size: 30px;
+    margin-top: 2px;
+    width: 100%;
+}
+
+* {
+    outline: none;
+}

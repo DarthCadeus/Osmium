@@ -126,6 +126,7 @@ function loadMainOS() {
 }
 
 function loadBootOS() {
+    include("css/auth-service.css", "css");
     include("js/systemEnvironment/cookieNotification.js", "js");
     const authService = include("js/systemEnvironment/authService.js", "js");
     // const authServiceStyling;
