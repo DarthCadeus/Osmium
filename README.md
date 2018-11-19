@@ -12,16 +12,21 @@ Unsplash, through Unsplash wallpapers
 #### File Icons
 ##### Folders
 author website: http://www.thesquid.ink/flat-icons/
+
 source: easyicon.net
 ##### Generic
 author: Alessandro Roncone
+
 author website: https://github.com/alecive/FlatWoken
+
 source: easyicon.net
 ##### Other icons
 author website: easyicon.net
+
 source: easyicon.net
 #### Apps
-author: Owen li (Darth Cadeus)
+author: Owen li (a.k.a DarthCadeus, owner of this repository)
+
 created with: canva.com
 #### Folders
 http://www.thesquid.ink/flat-icons/, easyicon.net
