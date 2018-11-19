@@ -120,6 +120,9 @@ function loadMainOS() {
     include("js/appSupport/PathFinder/handleBackButton.js", "js");
     include("js/appSupport/PathFinder/PathFinderRegister.js", "js");
 
+    // notation
+    include("js/appSupport/Notation/NotationRegister.js", "js");
+
     // load js styling
     include("js/systemEnvironment/backgroundPictureService.js", "js")
     include("js/systemEnvironment/dynamicStyle.js", "js");
