@@ -86,6 +86,7 @@ function demand(f, t) {
 
 // internal libraries
 include("js/utils.js", "js");
+include("js/SceneManager.js", "js");
 
 function loadMainOS() {
     // include the rest of the dependencies
