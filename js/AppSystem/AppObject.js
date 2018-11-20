@@ -45,5 +45,12 @@ class TrustedAppObject extends DefaultApp {
     constructor(name, metadata, html, callback) {
         super(name, metadata, html, callback);
         this.developer = this.metadata.developer;
+        this.source = this.metadata.source;  // as a fallback
     }
 }
+
+TrustedAppObject.prototype.revert = function () {
+    this.popOpen = AppObject.prototype.popOpen;
+    this.callback = function(){};
+    this.html = "";
+};
