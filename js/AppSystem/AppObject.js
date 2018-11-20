@@ -40,3 +40,10 @@ DefaultApp.prototype.popOpen = function () {
     });
     this.callback(this);
 }
+
+class TrustedAppObject extends DefaultApp {
+    constructor(name, metadata, html, callback) {
+        super(name, metadata, html, callback);
+        this.developer = this.metadata.developer;
+    }
+}
