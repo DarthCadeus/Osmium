@@ -37,6 +37,9 @@ class DefaultApp extends AppObject {
 }
 
 DefaultApp.prototype.popOpen = function () {
+    if(this.id == undefined) {
+        return;
+    }
     let windowObject = $("<div></div>");
     windowObject.append(this.html).dialog({
         title: this.name
@@ -69,6 +72,9 @@ class IntegratedAppObject extends DefaultApp {
 }
 
 IntegratedAppObject.prototype.popOpen = function() {
+    if(this.id == undefined) {
+        return;
+    }
     $(target).append(this.e);
 }
 
