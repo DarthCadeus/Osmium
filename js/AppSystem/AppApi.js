@@ -7,6 +7,6 @@ AppObject.prototype.getElement = function (a) {
 
 function generate_api(id) {
     return {
-        getElement: undefined;
+        getElement: appInterface.find(id).getElement
     };
 }

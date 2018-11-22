@@ -48,7 +48,7 @@ DefaultApp.prototype.popOpen = function () {
         return;
     }
     let windowObject = $("<div></div>");
-    windowObject.append(el).dialog({
+    windowObject.append(this.el).dialog({
         title: this.name
     });
     this.callback(this);
