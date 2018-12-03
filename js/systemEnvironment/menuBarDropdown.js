@@ -14,3 +14,6 @@ $(".system-icon img").click(function () {
         registered($(".extended-system-space"));
     }
 });
+
+// hacks to fix
+registry.register(logOutButton);

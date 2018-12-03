@@ -15,6 +15,14 @@ function loadFile(sourceObject, file, query) {
         selfObjectId: file.get("objectId"),
         source: sourceObject
     });
+
+    // // TODO: expand this
+    // if (sourceObject.type == "png" || sourceObject.type == "jpg") {
+    //     let file = AV.File.createWithoutData('552e0a27e4b0643b709e891e');
+    //     let thumbnailUrl = file.thumbnailURL(100, 200);
+    //     fileObject.icon = thumbnailUrl;
+    // }
+
     let parent;
 
     // see if to use the default

@@ -43,7 +43,7 @@ class DefaultApp extends AppObject {
     }
 }
 
-DefaultApp.prototype.popOpen = function () {
+DefaultApp.prototype.popOpen = function (sceneMode) {
     if(this.id == undefined) {
         return;
     }
@@ -56,6 +56,12 @@ DefaultApp.prototype.popOpen = function () {
 
 DefaultApp.prototype.refresh = function () {
     this.el = $(this.html);
+}
+
+class DefaultScenedApp extends AppObject {
+    constructor(name, metadata) {
+        super(name, metadata);
+    }
 }
 
 class TrustedAppObject extends DefaultApp {

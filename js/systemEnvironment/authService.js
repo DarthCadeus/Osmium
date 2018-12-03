@@ -119,3 +119,14 @@ function logIn() {
 // let authService = {
 // 	curUser: AV.User.current()
 // }
+
+function logOutButton(x) {
+	console.log("Hi")
+	x.find(".logout-space").append($("<button class='logout'>Log out</button>"));
+	$(".logout").click(function(){
+		AV.User.logOut();
+		ls.cancel("username");
+		ls.cancel("password");
+		location.reload();
+	})
+}
