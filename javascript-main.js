@@ -964,58 +964,6 @@ function include(src, type) {
     }
 }
 
-// authenticates if the function is present
-function checkFunction(f) {
-    try {
-        eval(f)
-    } catch (err) {
-        if (err instanceof ReferenceError || err instanceof TypeError) {
-            return false
-        }
-    }
-    return true
-}
-
-function checkClass(c) {
-    try {
-        new eval(c)
-    } catch (err) {
-        if (err instanceof ReferenceError || err instanceof TypeError) {
-            return false
-        }
-    }
-    return true
-}
-
-function check(o, t) {
-    if(!t) {
-        if(o.charAt().toUpperCase() == o.charAt()) {
-            t = "class"
-        } else {
-            t = "function"
-        }
-    }
-    if(t == "class") {
-        return checkClass(o)
-    } else {
-        return checkFunction(o)
-    }
-}
-
-function demand(f, t) {
-    let result;
-    const id = setInterval(function() {
-        result = check(f, t);
-        if(result) {
-            clearInterval(id);
-            return;
-        }else{
-            console.log("retrying...")
-        }
-    }, 50)
-}
-
-
 // internal libraries
 include("js/utils.js", "js");
 include("js/SceneManager.js", "js");
