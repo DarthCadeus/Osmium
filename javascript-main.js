@@ -1,3 +1,49 @@
+class FileSystem {
+	constructor() {
+		this.originNode = {
+			name: ROOT,
+			type: DIRECTORY,
+			children: [],
+			forEachChild: FileEntity.prototype.forEachChild,
+			getPath: () => {ROOT},
+			search: FileEntity.prototype.search
+		}  // bypass the parent restrictions
+		this.trashNode = {
+			name: TRASH,
+			type: DIRECTORY,
+			children: [],
+			forEachChild: FileEntity.prototype.forEachChild,
+			getPath: () => {TRASH},
+			search: FileEntity.prototype.search
+		}  // bypass the parent restrictions
+	}
+}
+
+FileSystem.prototype.addFile = function(name, parent, bound) {
+	return new FileEntity(name, parent, bound);
+};
+
+FileSystem.prototype.removeFile = function(name, parent) {
+	let removed = false;
+	parent.forEachChild(function(x) {
+		if(x.name == name) {
+			x.bind(this.trashNode);
+			removed = true;
+		}
+	});
+	return removed;
+};
+
+FileSystem.prototype.forEachChild = function(f) {
+	this.originNode.forEachChild(f);
+}
+
+FileSystem.prototype.search = function(criteria) {
+	return this.originNode.search(criteria);
+}
+
+let fs = new FileSystem();
+
 function initFileSystem() {
     // fetch files from server
 
@@ -678,52 +724,6 @@ FileEntity.prototype.search = function (criteria) {
 	return searchRes;
 }
 
-
-class FileSystem {
-	constructor() {
-		this.originNode = {
-			name: ROOT,
-			type: DIRECTORY,
-			children: [],
-			forEachChild: FileEntity.prototype.forEachChild,
-			getPath: () => {ROOT},
-			search: FileEntity.prototype.search
-		}  // bypass the parent restrictions
-		this.trashNode = {
-			name: TRASH,
-			type: DIRECTORY,
-			children: [],
-			forEachChild: FileEntity.prototype.forEachChild,
-			getPath: () => {TRASH},
-			search: FileEntity.prototype.search
-		}  // bypass the parent restrictions
-	}
-}
-
-FileSystem.prototype.addFile = function(name, parent, bound) {
-	return new FileEntity(name, parent, bound);
-};
-
-FileSystem.prototype.removeFile = function(name, parent) {
-	let removed = false;
-	parent.forEachChild(function(x) {
-		if(x.name == name) {
-			x.bind(this.trashNode);
-			removed = true;
-		}
-	});
-	return removed;
-};
-
-FileSystem.prototype.forEachChild = function(f) {
-	this.originNode.forEachChild(f);
-}
-
-FileSystem.prototype.search = function(criteria) {
-	return this.originNode.search(criteria);
-}
-
-let fs = new FileSystem();
 
 
 
