@@ -1,3 +1,210 @@
+const DIRECTORY = "directory";
+const ROOT = ".";
+const TRASH = "t."
+
+function randint (min, max) {
+    return Math.floor(Math.random() * (max+1 - min) + min);
+}
+function choice(list) {
+    return list[randint(0, list.length-1)];
+}
+let random = {
+    randint: randint,
+    choice: choice
+}
+
+class LocalStorageManager {
+    constructor(prioritizeCookies) {
+        this.prioritizeCookies = prioritizeCookies;
+    }
+}
+
+LocalStorageManager.prototype.set = function (key, value, exdays) {
+    if(exdays) {
+        this.setCookie(key, value, exdays);
+    } else {
+        window.localStorage.setItem(key, value);
+    }
+};
+
+LocalStorageManager.prototype.get = function (key) {
+    const ls = window.localStorage.getItem(key);
+    if(ls) return ls;
+    return this.getCookie(key);
+};
+
+LocalStorageManager.prototype.cancel = function (key) {
+    window.localStorage.removeItem(key);
+    this.deleteCookie(key);
+};
+
+LocalStorageManager.prototype.setCookie = function (key, value, exdays) {
+    let d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = key + "=" + value + ";" + expires + ";path=/";
+};
+
+LocalStorageManager.prototype.getCookie = function (key) {
+    let name = key + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+};
+
+LocalStorageManager.prototype.renewCookie = function (key, renew) {
+    const step = renew || 30;
+    const value = this.getCookie(key);
+    if(value == "") return false;
+    this.setCookie(key, value, step);
+    return true;
+};
+
+LocalStorageManager.prototype.deleteCookie = function (key) {
+    const value = this.getCookie(key);
+    if(value == "") return false;
+    this.setCookie(key, value, -1);
+};
+
+function join (l1, l2) {
+    for(let i = 0; i < l1.length; i++) {
+        l2.push(l1[i]);
+    }
+    return l2;
+}
+
+
+class FileEntity {
+	constructor(name, parent, bound) {
+		this.name = name;
+		this.parent = parent;
+		parent.children.push(this);
+		this.index = parent.children.length - 1;
+		this.children = [];
+		this.bound = bound;
+	}
+}
+
+FileEntity.prototype.isdir = function() {
+	return this.type == DIRECTORY;
+};
+
+FileEntity.prototype.forEachChild = function(f) {
+	let collected_returns = [];
+	for(let i = 0; i < this.children.length; i ++) {
+		collected_returns.push(f(this.children[i]));
+	}
+	return collected_returns;
+};
+
+FileEntity.prototype.unBind = function() {
+	this.parent.children.splice(this.index, 1);
+	this.index = undefined;
+	this.parent = undefined;
+	return this;
+};
+
+FileEntity.prototype.bind = function(parent) {
+	this.parent = parent;
+	parent.children.push(this);
+	this.index = parent.children.length - 1;
+	return this;
+};
+
+FileEntity.prototype.getPath = function() {
+	return this.parent.getPath() + "/" + this.name;
+}
+
+
+FileEntity.prototype.match = function(criteria) {
+	if (!criteria) {
+		return false;
+	}
+	let objectid_matched = true;  // defaults to true because of return mechanism
+	let name_matched = true;
+	let type_matched = true;
+	if (criteria.selfObjectId) {
+		if(this.bound.selfObjectId != criteria.selfObjectId) {
+			objectid_matched = false;
+		}
+	}
+	if (criteria.name) {
+		if(this.name != criteria.name) {
+			name_matched = false;
+		}
+	}
+	if (criteria.type) {
+		if(this.bound.type != criteria.type) {
+			type_matched = false;
+		}
+	}
+	return objectid_matched && name_matched && type_matched;
+}
+
+FileEntity.prototype.search = function (criteria) {
+	let searchRes = [];
+	this.forEachChild(function(c) {
+		if (c.match(criteria)) {
+			searchRes.push(c);
+		}
+		let curSearchRes = c.search(criteria);
+		if (curSearchRes != []) {
+			searchRes = join(curSearchRes, searchRes);
+		}
+	});
+	return searchRes;
+}
+
+
+
+
+
+const available_icons = ["ai", "avi", "css", "dbf", "doc", "dwg", "exe", "fla", "html", "iso", "js", "json", "mp3", "mp4", "pdf", "png", "ppt", "rtf", "svg", "txt", "xls", "xml", "zip", "directory"];
+const icon_redirect = {
+	"docx": "doc",
+	"pptx": "ppt",
+	"xlsx": "xls",
+	"md": "rtf",
+	"xhtml": "html",
+};
+
+class BoundFileObject {
+	constructor (config) {
+		this.url = config.url;
+		this.size = config.size;
+		this.createdAt = config.createdAt;
+		this.modifiedAt = config.modifiedAt;
+		this.user = config.user;
+		this.permissions = config.permit;
+		this.type = config.type;
+		this.objectId = config.objectId;
+		this.selfObjectId = config.selfObjectId;
+		if(available_icons.indexOf(this.type) != -1) {
+			this.icon = "assets/logos/File icons/"+this.type+".png";
+		} else if (icon_redirect[this.type]) {
+			this.icon = "assets/logos/File icons/"+icon_redirect[this.type]+".png";
+		} else {
+			this.icon = "assets/logos/File icons/generic.png";
+		}
+		this.config = config;
+		this.source = config.source;
+	}
+}
+
+BoundFileObject.prototype.permit = function (user) {
+	if(this.permissions.user.id == user.id) return true;
+	return false;
+};
+
 class FileSystem {
 	constructor() {
 		this.originNode = {
@@ -293,9 +500,6 @@ function onRenderHandleBackButton(button) {
         return false;
     }
 }
-
-renderRegister.register(onRenderHandleBackButton);
-
 
 function handleNewFolder(){
 
@@ -639,131 +843,6 @@ SceneList.prototype.start = function (options) {
 }
 
 
-const DIRECTORY = "directory";
-const ROOT = ".";
-const TRASH = "t."
-
-class FileEntity {
-	constructor(name, parent, bound) {
-		this.name = name;
-		this.parent = parent;
-		parent.children.push(this);
-		this.index = parent.children.length - 1;
-		this.children = [];
-		this.bound = bound;
-	}
-}
-
-FileEntity.prototype.isdir = function() {
-	return this.type == DIRECTORY;
-};
-
-FileEntity.prototype.forEachChild = function(f) {
-	let collected_returns = [];
-	for(let i = 0; i < this.children.length; i ++) {
-		collected_returns.push(f(this.children[i]));
-	}
-	return collected_returns;
-};
-
-FileEntity.prototype.unBind = function() {
-	this.parent.children.splice(this.index, 1);
-	this.index = undefined;
-	this.parent = undefined;
-	return this;
-};
-
-FileEntity.prototype.bind = function(parent) {
-	this.parent = parent;
-	parent.children.push(this);
-	this.index = parent.children.length - 1;
-	return this;
-};
-
-FileEntity.prototype.getPath = function() {
-	return this.parent.getPath() + "/" + this.name;
-}
-
-
-FileEntity.prototype.match = function(criteria) {
-	if (!criteria) {
-		return false;
-	}
-	let objectid_matched = true;  // defaults to true because of return mechanism
-	let name_matched = true;
-	let type_matched = true;
-	if (criteria.selfObjectId) {
-		if(this.bound.selfObjectId != criteria.selfObjectId) {
-			objectid_matched = false;
-		}
-	}
-	if (criteria.name) {
-		if(this.name != criteria.name) {
-			name_matched = false;
-		}
-	}
-	if (criteria.type) {
-		if(this.bound.type != criteria.type) {
-			type_matched = false;
-		}
-	}
-	return objectid_matched && name_matched && type_matched;
-}
-
-FileEntity.prototype.search = function (criteria) {
-	let searchRes = [];
-	this.forEachChild(function(c) {
-		if (c.match(criteria)) {
-			searchRes.push(c);
-		}
-		let curSearchRes = c.search(criteria);
-		if (curSearchRes != []) {
-			searchRes = join(curSearchRes, searchRes);
-		}
-	});
-	return searchRes;
-}
-
-
-
-
-
-const available_icons = ["ai", "avi", "css", "dbf", "doc", "dwg", "exe", "fla", "html", "iso", "js", "json", "mp3", "mp4", "pdf", "png", "ppt", "rtf", "svg", "txt", "xls", "xml", "zip", "directory"];
-const icon_redirect = {
-	"docx": "doc",
-	"pptx": "ppt",
-	"xlsx": "xls",
-	"md": "rtf",
-	"xhtml": "html",
-};
-
-class BoundFileObject {
-	constructor (config) {
-		this.url = config.url;
-		this.size = config.size;
-		this.createdAt = config.createdAt;
-		this.modifiedAt = config.modifiedAt;
-		this.user = config.user;
-		this.permissions = config.permit;
-		this.type = config.type;
-		this.objectId = config.objectId;
-		this.selfObjectId = config.selfObjectId;
-		if(available_icons.indexOf(this.type) != -1) {
-			this.icon = "assets/logos/File icons/"+this.type+".png";
-		} else if (icon_redirect[this.type]) {
-			this.icon = "assets/logos/File icons/"+icon_redirect[this.type]+".png";
-		} else {
-			this.icon = "assets/logos/File icons/generic.png";
-		}
-		this.config = config;
-		this.source = config.source;
-	}
-}
-
-BoundFileObject.prototype.permit = function (user) {
-	if(this.permissions.user.id == user.id) return true;
-	return false;
-};
 
 let renderRegister = {
 	registered: [],
@@ -771,6 +850,8 @@ let renderRegister = {
 		this.registered.push(f);
 	}
 }
+
+renderRegister.register(onRenderHandleBackButton);
 
 function render(node, target) {
 	$(target).empty();
@@ -850,6 +931,7 @@ $(function(){
 // this js will include all the core support libraries
 // first of all, include all the other dependencies
 function include(src, type) {
+    // return;  // hack: fix
     // had to work out all the jquery
     // or else it will not allow the scripts to be loaded this way
     // no jquery is used because jquery blocks this
@@ -872,6 +954,7 @@ function include(src, type) {
         document.getElementsByTagName("head")[0].appendChild(link);
         return link;
     }else if (type == "js") {
+        return;  // hack: fix
         let script = document.createElement("script");
         let source = document.createAttribute("src");
         source.value = src;
@@ -1047,8 +1130,6 @@ function setDesktop(id) {
     });
 }
 
-registry.register(selectDesktop);
-
 
 // remain empty
 // this was originally conceived of as a method to attach context menus
@@ -1071,6 +1152,8 @@ let registry = [];
 registry.register = function (f) {
     this.push(f);
 }
+
+registry.register(selectDesktop);
 
 $(".system-icon img").click(function () {
     $(this).toggleClass("active")
@@ -1222,21 +1305,12 @@ function logOutButton(x) {
 
 
 // internal
-let SYSENV = {
-	curUser: authService.curUser
-}
+// let SYSENV = {
+// 	curUser: authService.curUser
+// }
 
 
-function randint (min, max) {
-    return Math.floor(Math.random() * (max+1 - min) + min);
-}
-function choice(list) {
-    return list[randint(0, list.length-1)];
-}
-let random = {
-    randint: randint,
-    choice: choice
-}
+
 
 function popDialog(html, options) {
     $(html).dialog(options);
@@ -1256,73 +1330,4 @@ function leancloudInit(id, key) {
             appKey: key
         });
     }
-}
-
-class LocalStorageManager {
-    constructor(prioritizeCookies) {
-        this.prioritizeCookies = prioritizeCookies;
-    }
-}
-
-LocalStorageManager.prototype.set = function (key, value, exdays) {
-    if(exdays) {
-        this.setCookie(key, value, exdays);
-    } else {
-        window.localStorage.setItem(key, value);
-    }
-};
-
-LocalStorageManager.prototype.get = function (key) {
-    const ls = window.localStorage.getItem(key);
-    if(ls) return ls;
-    return this.getCookie(key);
-};
-
-LocalStorageManager.prototype.cancel = function (key) {
-    window.localStorage.removeItem(key);
-    this.deleteCookie(key);
-};
-
-LocalStorageManager.prototype.setCookie = function (key, value, exdays) {
-    let d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = key + "=" + value + ";" + expires + ";path=/";
-};
-
-LocalStorageManager.prototype.getCookie = function (key) {
-    let name = key + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-};
-
-LocalStorageManager.prototype.renewCookie = function (key, renew) {
-    const step = renew || 30;
-    const value = this.getCookie(key);
-    if(value == "") return false;
-    this.setCookie(key, value, step);
-    return true;
-};
-
-LocalStorageManager.prototype.deleteCookie = function (key) {
-    const value = this.getCookie(key);
-    if(value == "") return false;
-    this.setCookie(key, value, -1);
-};
-
-function join (l1, l2) {
-    for(let i = 0; i < l1.length; i++) {
-        l2.push(l1[i]);
-    }
-    return l2;
 }
