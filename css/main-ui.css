@@ -28,11 +28,19 @@ body {
     opacity: 0.98;
     overflow: scroll;
     position: absolute;
+    vertical-align: bottom;
 }
 
 .background-image-space {
+    width: 40%;
+    display: inline-block;
     height: 20vh;
     overflow: scroll;
+}
+
+.logout-space {
+    display: inline-block;
+    width: 40%;
 }
 
 .background-entity {
@@ -44,6 +52,8 @@ body {
     box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .2);
 
     background-size: cover;
+
+    display: inline-block;
 }
 
 .desktop {
