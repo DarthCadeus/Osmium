@@ -109,6 +109,7 @@ function loadMainOS() {
 
     // load app system
     include("js/appSystem/AppObject.js", "js");
+    include("js/appSystem/TrustedAppObject.js", "js");
     include("js/appSystem/appManager.js", "js");
 
     // load default apps

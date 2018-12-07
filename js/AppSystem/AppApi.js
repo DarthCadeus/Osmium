@@ -4,9 +4,3 @@ AppObject.prototype.getElement = function (a) {
     res.parentElement = undefined;
     return res;  // oh yes, just you try to get its parent
 };
-
-function generate_api(id) {
-    return {
-        getElement: appInterface.find(id).getElement
-    };
-}

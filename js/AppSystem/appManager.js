@@ -4,6 +4,7 @@ let appInterface = {
     id_counter: 0,
     register: function(x){
         x.id = ++this.id_counter;
+        x.onid();
         this.registry.push(x);
         const result = x.renderSmall();
         $(".desktop").append(result);
