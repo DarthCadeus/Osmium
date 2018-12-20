@@ -14,10 +14,16 @@ These are applications that come with the OS itself. It extends `AppObject`, but
 This is the root class for the app system, and it is run in an `<iframe>`, although the `<iframe>` is not sandboxed. It is assumed that these `<iframes>` are cross-origin. The OS does not communicate with the `<iframe>` in any way. These can be created by the user directly.
 
 ### TrustedApp
-These are the third party variant of the `DefaultApp`. These will be sandboxed, although **not yet**. These applications will be able to access the system to some extent, but they will be contained within a dialog.
+These are the third party variant of the `DefaultApp`. These are sandboxed. These applications will be able to access the system to some extent, but they will be contained within a dialog.
+
+### Jailing
+This uses the "jailed" library (or rather a slightly modified version of it - the slight modification currently does not do much). The api allows the application to set its own html. All event handlers, whether done with event listeners or `onclick` are removed.
+
+#### Event Handling
+All event listeners will be attached through the api provided to the application. These are sandboxed using a separate jailed plugin. It is automatically disconnected by adding an `application.disconnect` line directly to the code provided, so **timeouts will not work properly**.
 
 ### IntegratedApp
-`IntegratedApp`s are not bound by a dialog. Their html code is **directly appended to the site**. Their `js`, however, is fully sandboxed, and event handlers like `onclick` directly embedded into html may be removed, although **not yet**. 
+`IntegratedApp`s are not bound by a dialog. Their html code is **directly appended to the site**. Their `js`, however, is fully sandboxed, and event handlers like `onclick` directly embedded into html may be removed, although **not yet**.
 
 ---
 

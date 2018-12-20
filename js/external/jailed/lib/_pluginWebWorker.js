@@ -16,7 +16,7 @@ self.connection = {};
      * Event lisener for the plugin message
      */
     self.addEventListener('message', function(e){
-        var m = e.data.data;
+        let m = e.data.data;
         switch (m.type) {
         case 'import':
         case 'importJailed':  // already jailed in the iframe
@@ -38,12 +38,12 @@ self.connection = {};
      * @param {String} url to load
      */
     var importScript = function(url) {
-        var error = null;
+        let error = null;
 
         // importScripts does not throw an exception in old webkits
         // (Opera 15.0), but we can determine a failure by the
         // returned value which must be undefined in case of success
-        var returned = true;
+        let returned = true;
         try {
             returned = importScripts(url);
         } catch (e) {

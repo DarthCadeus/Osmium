@@ -9,21 +9,42 @@ class TrustedAppObject extends AppObject {
 TrustedAppObject.prototype.onid = function () {
     let self = this;
     let api = {
-        getElement: function (a) {
-            // now the namespace is enforced
-            let res = $(self.el).find(a)[0];
-            res.parentElement = undefined;
-            return res;  // oh yes, just you try to get its parent
+        populate (el) {
+            self.el = $(el);  // hopefully self.el is unreadable by the plugin
+            self.el = unbind(self.el[0]);
         },
-        populate: function (el) {
-            self.el = el;
-        },
-        debug: function (msg) {
+        debug (msg) {
             console.log("Below is app message");
             console.log(msg);
+        },
+        addEventListener (sel, event, code) {
+            if(!code) {
+                code = event;
+                event = "click";
+            }
+            let el;
+            if (self.el.is(sel)) {
+                el = self.el;
+            } else {
+                el = self.el.find(sel);
+            }
+            console.log(el)
+            let sub_api = {
+                getHtml() {
+                    return this.el[0].outerHTML;
+                },
+                debug (msg) {
+                    console.log("Below is app message");
+                    console.log(msg);
+                }
+            }
+            $(el).on(event, function () {
+                let plugin = new jailed.DynamicPlugin(code + "\napplication.disconnect();", api);
+            });
         }
     };
     let plugin = new jailed.Plugin(this.script_url, api);
+    this.plugin = plugin;
 }
 
 TrustedAppObject.prototype.revert = function () {

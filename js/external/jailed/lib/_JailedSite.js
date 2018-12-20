@@ -314,6 +314,18 @@
         this._connection.send({type: 'disconnect'});
         this._connection.disconnect();
     }
+
+    /**
+     * Sends the notification message and breaks the connection after waiting for some time using
+     setTimeout
+     */
+    JailedSite.prototype.timedDisconnect = function(t) {
+        let self = this;
+        setTimeout(function() {
+            this._connection.send({type: 'disconnect'});
+            this._connection.disconnect();
+        }, t);
+    }
     
      
     /**

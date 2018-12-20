@@ -97,3 +97,96 @@ function join (l1, l2) {
     }
     return l2;
 }
+
+function unbind(el) {
+    // code from StackOverflow (Ben D)
+    let new_element = $(el.cloneNode(true));
+
+    // rest is original
+    const listOfBannedAttributes = [
+        "onabort",
+        "onafterprint",
+        "onbeforeprint",
+        "onbeforeunload",
+        "onblur",
+        "oncanplay",
+        "oncanplaythrough",
+        "onchange",
+        "onclick",
+        "oncontextmenu",
+        "oncopy",
+        "oncuechange",
+        "oncut",
+        "ondblclick",
+        "ondrag",
+        "ondragend",
+        "ondragenter",
+        "ondragleave",
+        "ondragover",
+        "ondragstart",
+        "ondrop",
+        "ondurationchange",
+        "onemptied",
+        "onended",
+        "onerror",
+        "onfocus",
+        "onhashchange",
+        "oninput",
+        "oninvalid",
+        "onkeydown",
+        "onkeypress",
+        "onkeyup",
+        "onload",
+        "onloadeddata",
+        "onloadedmetadata",
+        "onloadstart",
+        "onmousedown",
+        "onmousemove",
+        "onmouseout",
+        "onmouseover",
+        "onmouseup",
+        "onmousewheel",
+        "onoffline",
+        "ononline",
+        "onpagehide",
+        "onpageshow",
+        "onpaste",
+        "onpause",
+        "onplay",
+        "onplaying",
+        "onpopstate",
+        "onprogress",
+        "onratechange",
+        "onreset",
+        "onresize",
+        "onscroll",
+        "onsearch",
+        "onseeked",
+        "onseeking",
+        "onselect",
+        "onstalled",
+        "onstorage",
+        "onsubmit",
+        "onsuspend",
+        "ontimeupdate",
+        "ontoggle",
+        "onunload",
+        "onvolumechange",
+        "onwaiting",
+        "onwheel"
+    ];  // fall back. Correct way is to just have if starts with on
+    // remove atttr
+    const listOfBannedTags = [
+        "script"
+    ];
+    for (let x of listOfBannedAttributes) {
+        new_element.removeAttr(x);
+        new_element.find("["+x+"]").removeAttr(x);
+    }
+    for (let x of listOfBannedTags) {
+        new_element.find(x).remove();
+        if(new_element.is(x)) return $("<div></div>")
+    }
+    console.log(new_element)
+    return new_element;
+}

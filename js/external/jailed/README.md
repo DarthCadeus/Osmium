@@ -4,10 +4,14 @@ Jailed — flexible JS sandbox
 Jailed is a small JavaScript library for running untrusted code in a
 sandbox. The library is written in vanilla-js and has no dependencies.
 
+### Important
+This fork of the "Jailed" library is especially optimised for web
+development, and consequently have dropped all node support.
+Specifically, this is adapted for use in [Osmium](https://github.com/DarthCadeus/Osmium).
+
 With Jailed you can:
 
 - Load an untrusted code into a secure sandbox;
-
 - Export a set of external functions into the sandbox.
 
 The untrusted code may then interract with the main application by
@@ -15,32 +19,20 @@ directly calling those functions, but the application owner decides
 which functions to export, and therefore what will be allowed for the
 untrusted code to perform.
 
-The code is executed as a *plugin*, a special instance running as a
-restricted subprocess (in Node.js), or in a web-worker inside a
-sandboxed frame (in case of web-browser environment). The iframe is
-created locally, so that you don't need to host it on a separate
-(sub)domain.
+The code is executed as a *plugin*, a web-worker inside a
+sandboxed frame. The iframe is created locally, so that you 
+don't need to host it on a separate (sub)domain.
 
 
 You can use Jailed to:
 
 - Setup a safe environment for executing untrusted code, without a
-  need to create a sandboxed worker / subprocess manually;
-
-- Do that in an isomorphic way: the syntax is same both for Node.js
-  and web-browser, the code works unchanged;
+  need to create a sandboxed worker manually;
 
 - Execute a code from a string or from a file;
 
 - Initiate and interrupt the execution anytime;
 
-- *[Demo](http://asvd.github.io/jailed/demos/web/console/)* safely
-   execute user-submitted code;
-
-- *[Demo](http://asvd.github.io/jailed/demos/web/banner/)* embed
-  3rd-party code and provide it the precise set of functions to
-  harmlessly operate on the part of your application;
-  
 - Export the particular set of application functions into the sandbox
   (or in the opposite direction), and let those functions be invoked
   from the other site (without a need for manual messaging) thus
@@ -75,7 +67,7 @@ application.remote.alert('Hello from the plugin!');
 *(exporting the `alert()` method is not that good idea actually)*
 
 Under the hood, an application may only communicate to a plugin
-(sandboxed worker / jailed subprocess) through a messaging mechanism,
+(sandboxed worker) through a messaging mechanism,
 which is reused by Jailed in order to simulate the exporting of
 particular functions. Each exported function is duplicated on the
 opposite site with a special wrapper method with the same name. Upon
@@ -106,28 +98,8 @@ the `<script>` tag:
 <script src="jailed/jailed.js"></script>
 ```
 
-For Node.js — install Jailed with npm:
-
-```sh
-$ npm install jailed
-```
-
-and then in your code:
-
-```js
-var jailed = require('jailed');
-```
-
-Optionally you may load the script from the
-[distribution](https://github.com/asvd/jailed/releases/download/v0.3.1/jailed-0.3.1.tar.gz):
-
-```js
-var jailed = require('path/to/jailed.js');
-```
-
 After the module is loaded, the two plugin constructors are available:
 `jailed.Plugin` and `jailed.DynamicPlugin`.
-
 
 
 ### Usage
@@ -151,17 +123,12 @@ straightforward):
   provided to a callback instead.
 
 
-*In Node.js the
- [send()](http://nodejs.org/api/child_process.html#child_process_child_send_message_sendhandle)
- method of a child process object is used for transfering messages,
- which serializes an object into a JSON-string. In a web-browser
- environment, the messages are transfered via
+* The messages are transfered via
  [postMessage()](https://developer.mozilla.org/en-US/docs/Web/API/Window.postMessage)
  method, which implements [the structured clone
  algorithm](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm)
- for the serialization. That algorithm is more capable than JSON (for
- instance, in a web-browser you may send a RegExp object, which is not
- possible in Node.js). [More details about structured clone algorithm
+ for the serialization. That algorithm is more capable than JSON
+[More details about structured clone algorithm
  and its comparsion to
  JSON](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm).*
 
@@ -335,23 +302,6 @@ browsers:
 
 This is how the sandbox is built:
 
-##### In Node.js:
-
-- A Node.js subprocess is created by the Jailed library;
-
-- the subprocess (down)loads the file containing an untrusted code as
-  a string (or, in case of `DynamicPlugin`, simply uses the provided
-  string with code)
-
-- then `"use strict";` is appended to the head of that code (in order
-  to prevent breaking the sandbox using `arguments.callee.caller`);
-
-- finally the code is executed using `vm.runInNewContext()` method,
-  where the provided sandbox only exposes some basic methods like
-  `setTimeout()`, and the `application` object for messaging with the
-  application site.
-
-
 ##### In a web-browser:
 
 - a [sandboxed
@@ -374,8 +324,3 @@ main application origin);
  is still not accessible from the worker). Therefore if you need to
  safely execute untrusted code on a local system, reuse the Jailed
  library in Node.js.*
-
-
-
-follow me on twitter: https://twitter.com/asvd0
-
