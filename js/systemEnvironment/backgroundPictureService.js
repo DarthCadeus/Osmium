@@ -1,7 +1,7 @@
 const DESKTOPS = 6;
 
 $(".desktop").css({
-    "background-image": `url(https://i.postimg.cc/9QmY3thy/${random.randint(1, DESKTOPS)}.png)`
+    "background-image": `url(assets/default_backgrounds/${random.randint(1, DESKTOPS)}.png)`
 });
 
 function selectDesktop(locale) {
@@ -12,7 +12,7 @@ function selectDesktop(locale) {
     for (let i = 1; i <= DESKTOPS; i++) {
     	context = {
     		image: {
-                image: `https://i.postimg.cc/9QmY3thy/${i}.png`,
+                image: `assets/default_backgrounds/${i}.png`,
                 label: `${i}`
             }
     	};
@@ -22,7 +22,7 @@ function selectDesktop(locale) {
 
 function setDesktop(id) {
     $(".desktop").css({
-        "background-image": `url(https://i.postimg.cc/9QmY3thy/${id}.png)`
+        "background-image": `url(assets/default_backgrounds/${id}.png)`
     });
 }
 
