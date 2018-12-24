@@ -33,7 +33,10 @@ Applications are prevented from conflicting with the concept of **namespaces**. 
 
 ### Images
 #### Background pictures
-Unsplash, through Unsplash wallpapers
+author: Owen li (a.k.a DarthCadeus, owner of this repository)
+
+created with: canva.com
+
 #### File Icons
 ##### Folders
 author website: http://www.thesquid.ink/flat-icons/
