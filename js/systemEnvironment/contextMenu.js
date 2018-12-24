@@ -13,8 +13,9 @@ let contextMenuRegister = {
         this.contents.push(ctxMenuItem)
     },
     render() {
+        this.contextMenu = $("<div class='context-menu'></div>");
         for (let menuItem of this.contents) {
-            this.contextMenu.append($(`<div class='context-menu-item'>${menuItem.name}</div>`).click(function() {
+            this.contextMenu.append($(`<div class='context-menu-item'>${menuItem.name}</div>`).click(function(event) {
                 if(menuItem.callbacks instanceof Array) {
                     for (let callback of menuItem.callbacks) {
                         callback();
