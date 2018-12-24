@@ -32,7 +32,6 @@ let contextMenuRegister = {
 $(".desktop").contextmenu(function(e){
     $(".context-menu").remove();
     e.preventDefault();
-    console.log(e);
     let ctxMenu = contextMenuRegister.render();
     ctxMenu.css({
         left: e.pageX,

@@ -100,6 +100,7 @@ function loadMainOS() {
 
     // load system services
     include("js/systemEnvironment/contextMenu.js", "js");
+    include("js/systemEnvironment/aboutPage.js", "js");
     include("js/systemEnvironment/menuBarDropdown.js", "js");
 
     // load file system
