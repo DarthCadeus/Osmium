@@ -1,3 +1,43 @@
+class ContextMenuItem {
+    constructor (name, callbacks) {
+        this.name = name;
+        this.callbacks = callbacks;  // function or list of functions
+    }
+}
+
+let contextMenuRegister = {
+    contextMenu: $("<div class='context-menu'></div>"),
+    contents: [],
+    active: false,
+    register(ctxMenuItem) {
+        this.contents.push(ctxMenuItem)
+    },
+    render() {
+        for (let menuItem of this.contents) {
+            this.contextMenu.append($(`<div class='context-menu-item'>${menuItem.name}</div>`).click(function() {
+                if(menuItem.callbacks instanceof Array) {
+                    for (let callback of menuItem.callbacks) {
+                        callback();
+                    }
+                } else {
+                    menuItem.callbacks();
+                }
+            }));
+        }
+        return this.contextMenu;
+    }
+}
+
 $(".desktop").contextmenu(function(e){
     e.preventDefault();
+    let ctxMenu = contextMenuRegister.render();
+    contextMenuRegister.active = true;  // render may not mean activating
+    $(document).append(ctxMenu);
+});
+
+$(document).click(function () {
+    if (contextMenuRegister.active) {
+        $(".context-menu").remove();
+        contextMenuRegister.active = false;
+    }
 });
