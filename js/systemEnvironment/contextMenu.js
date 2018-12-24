@@ -30,8 +30,14 @@ let contextMenuRegister = {
 }
 
 $(".desktop").contextmenu(function(e){
+    $(".context-menu").remove();
     e.preventDefault();
+    console.log(e);
     let ctxMenu = contextMenuRegister.render();
+    ctxMenu.css({
+        left: e.pageX,
+        top: e.pageY
+    })
     contextMenuRegister.active = true;  // render may not mean activating
     $("body").append(ctxMenu);
 });
