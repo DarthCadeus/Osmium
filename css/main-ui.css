@@ -57,7 +57,7 @@ body {
 }
 
 .desktop {
-    background-image: url(assets/default_backgrounds/1.png);
+    background-image: url(../assets/default_backgrounds/1.png);
     background-size: cover;
     height: 89.4vh;
 }
