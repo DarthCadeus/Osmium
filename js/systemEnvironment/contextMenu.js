@@ -32,10 +32,10 @@ $(".desktop").contextmenu(function(e){
     e.preventDefault();
     let ctxMenu = contextMenuRegister.render();
     contextMenuRegister.active = true;  // render may not mean activating
-    $(document).append(ctxMenu);
+    $("body").append(ctxMenu);
 });
 
-$(document).click(function () {
+$("body").click(function () {
     if (contextMenuRegister.active) {
         $(".context-menu").remove();
         contextMenuRegister.active = false;
