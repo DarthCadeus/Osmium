@@ -124,7 +124,10 @@ function loadMainOS() {
     include("js/appSupport/PathFinder/PathFinderRegister.js", "js");
 
     // notation
-    include("js/appSupport/Notation/NotationRegister.js", "js");
+    // include("js/appSupport/Notation/NotationRegister.js", "js");
+
+    // QuizMaster
+    include("js/appSupport/QuizMaster/QuizMasterRegister.js", "js");
 
     // load js styling
     include("js/systemEnvironment/backgroundPictureService.js", "js")

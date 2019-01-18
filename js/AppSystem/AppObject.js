@@ -12,7 +12,7 @@ AppObject.prototype.popOpen = function () {
     if(this.id == undefined) {
         return;
     }
-    let windowObject = $("<div></div>");
+    let windowObject = $("<div class='app-window-iframe'></div>");
     let iframeObject = $(`<iframe class="app-container" id="app-${this.id}"></iframe>`).attr("src", this.metadata.source);
     windowObject.append(iframeObject).dialog({
         title: this.name
